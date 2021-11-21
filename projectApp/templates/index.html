@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>On The Ball</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}">
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            <h4>On The Ball</h4>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="/home">Home</a>
+            </li>
+            {% if 'user_id' in request.session %}
+            <li>
+                <button data-bs-toggle="modal" data-bs-target="#event">Create an Event</a>
+            </li>
+            <li>
+                <a href="/user/{{user.id}}">Profile</a>
+            </li>
+            {% endif %}
+            <li>
+                <button data-bs-toggle="modal" data-bs-target="#findevent">Find an Event</a>
+            </li>
+            {% if 'user_id' in request.session %}
+            <li>
+                <a href="/logout">Logout</a>
+            </li>
+            {% endif %}
+        </ul>
+        <div class="burger">
+            <div class="line1">
+            </div>
+            <div class="line2">
+            </div>
+            <div class="line3">
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <!-- Section 1 -->
+        <img id="please" src="static/images/slide02.jpg" alt="footballField_img">
+        <div class="text-content text-light">
+            <div style="color: red;">
+            {% if messages %}
+            {% for message in messages %}
+            <p>{{message}}</p>
+            {% endfor %}
+            {% endif %}
+            </div>
+            <h1>Welcome To On The Ball</h1><br>
+            <h3>On The Ball was created to connect with like minded people and to build a relationship within the
+                community. </h3>
+            <h3>We are hoping that with using On The Ball, this will give you the drive and courage to share your
+                passion for sports and encourage more people to keep fit and build long lasting friendships.</h3>
+            <!-- Button trigger modal -->
+            {% if 'user_id' not in request.session %}
+            <a type="button" class="main-stroked-button" data-bs-toggle="modal" data-bs-target="#login">Login</a>
+            <a href="#" class="main-filled-button" data-bs-toggle="modal" data-bs-target="#register">Register</a>
+            {% endif %}
+        </div>
+    </div>
+    <!-- //end Section 1 -->
+    <!-- Section 2 -->
+    <section class="p-5">
+        <div class="container">
+            <h2 style="text-align: center;" class="text-light">Testimonials</h2>
+                <p class="lead text-center text-white mb-5">
+                    What people say about us:
+                </p>
+            <div class="row text-center g-4">
+                <div class="col-md">
+                    <div class="card bg-dark text-light">
+                        <div class="card-body text-center">
+                            <div class="h1 mb-3">
+                                <img src="static/images/test1.jpg" width="50%" height="50%" />
+                            </div>
+                            <h3 class="card-title mb-3">Chris Fox.</h3>
+                            <p class="card-text">
+                                Great Job! Works like a charm. I love how easy it is to use the site and would highly
+                                recommend it. It helped me get out more after Covid, socialise and get active again. Met
+                                some amazing people through the site! Highly recommended! Five Stars! Keep up the great
+                                work!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="card bg-secondary text-light">
+                        <div class="card-body text-center">
+                            <div class="h1 mb-3">
+                                <img src="static/images/test2.jpg" width="50%" height="50%" />
+                            </div>
+                            <h3 class="card-title mb-3">Steve Pharell.</h3>
+                            <p class="card-text">
+                                I didn't even know how easy it is to create an event until On The Ball. The site made it
+                                so easy to reach like-minded people! There are tons of features. I'm able to Edit,
+                                Delete events, comments and have discussions with people insterested in my event. Thank
+                                you guys!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="card bg-dark text-light">
+                        <div class="card-body text-center">
+                            <div class="h1 mb-3">
+                                <img src="static/images/test3.jpg" width="50%" height="50%" />
+                            </div>
+                            <h3 class="card-title mb-3">Michelle Grainger.</h3>
+                            <p class="card-text">
+                                Thank you for connecting me with people with the same interest in
+                                sports! They are all absolutely fabulous and we all had a great time playing together!!
+                                We've decided to do it as a weekly thing and this site helped me make such great
+                                friends! Im really glad I found On The Ball!!! Yay!!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- //end Section 2 -->
+    <!-- Section 3 -->
+    <section id="creators" class="p-5">
+        <div class="container">
+            <h2 class="text-center text-white">Meet the Creators</h2>
+            <p class="lead text-center text-white mb-5">
+                Just a bunch of talented and passionate Coding Dojo Students making the world a better place one website
+                at a time.
+            </p>
+            <!-- Bryce -->
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card bg-dark">
+                        <div class="card-body text-center text-light">
+                            <img src="static/images/bryce1.jpg" alt="thatGingerGuy_img" class="rounded-circle mb-3"
+                                width="50%" height="50%" />
+                            <h3 class="card-title mb-3">Bryce Vargo</h3>
+                            <a href="#"><i class="bi bi-twitter text-light mx-1"></i></a>
+                            <a href="#"><i class="bi bi-github text-light mx-1"></i></a>
+                            <a href="#"><i class="bi bi-linkedin text-light mx-1"></i></a>
+                            <a href="#"><i class="bi bi-instagram text-light mx-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Ananya -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card bg-dark">
+                        <div class="card-body text-center text-light">
+                            <img src="static/images/ananya.jpeg" class="rounded-circle mb-3" alt="" width="50%"
+                                height="50%" />
+                            <h3 class="card-title mb-3">Ananya Kaiser</h3>
+                            <a href="#"><i class="bi bi-twitter text-light mx-1"></i></a>
+                            <a href="#"><i class="bi bi-github text-light mx-1"></i></a>
+                            <a href="#"><i class="bi bi-linkedin text-light mx-1"></i></a>
+                            <a href="#"><i class="bi bi-instagram text-light mx-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Ashley -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card bg-dark">
+                        <div class="card-body text-center text-light">
+                            <img src="static/images/ashley.jpg" class="rounded-circle mb-3" alt="" width="50%"
+                                height="50%" />
+                            <h3 class="card-title mb-3">Ashley Posada</h3>
+                            <a href="#"><i class="bi bi-twitter text-light mx-1"></i></a>
+                            <a href="#"><i class="bi bi-github text-light mx-1"></i></a>
+                            <a href="#"><i class="bi bi-linkedin text-light mx-1"></i></a>
+                            <a href="#"><i class="bi bi-instagram text-light mx-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Hannah  -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card bg-dark">
+                        <div class="card-body text-center text-light">
+                            <img src="static/images/hannah.jpg" class="rounded-circle mb-3" alt="" width="50%"
+                                height="50%" />
+                            <h3 class="card-title mb-3">Hannah Vangsness</h3>
+                            <a href="#"><i class="bi bi-twitter text-light mx-1"></i></a>
+                            <a href="#"><i class="bi bi-github text-light mx-1"></i></a>
+                            <a href="#"><i class="bi bi-linkedin text-light mx-1"></i></a>
+                            <a href="#"><i class="bi bi-instagram text-light mx-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <!-- Modals -->
+    <!-- Registration Modal -->
+    <div class="modal fade" id="register" tabindex="-1" aria-labelledby="registerLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registerLabel">Registration</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Fill out this form to Register!</p>
+                    <form action="/register" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="first_name">First Name:</label>
+                            <input type="text" name="first_name" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name">Last Name:</label>
+                            <input type="text" name="last_name" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="text" name="email" class="form-control">
+                        </div>
+                        <tr>
+                            <td><label class="form-label" for="dob">Date of Birth</label></td>
+                            <td><input type="date" name="dob" id="" class="form-control"></td>
+                        </tr>
+                        <tr>
+                            <td><label class="form-label" for="location">Location (enter city)</label></td>
+                            <td><input type="text" name="location" id="" class="form-control"></td>
+                        </tr>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" name="password" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm_password">Confirm Password:</label>
+                            <input type="password" name="confirm_password" class="form-control">
+                        </div>
+                        <input type="submit" value="Register" class="btn btn-primary">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Log-in Modal -->
+    <div class="modal fade" id="login" tabindex="-1" aria-labelledby="loginLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header text-dark">
+                    <h5 class="modal-title" id="loginLabel">Please Log-in</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/login" method="POST" class="p-2 text-light">
+                        {% csrf_token %}
+                        <div class="form-group text-dark">
+                            <label for="email">Email:</label>
+                            <input type="text" name="email" class="form-control">
+                        </div>
+                        <div class="form-group text-dark">
+                            <label for="password">Password:</label>
+                            <input type="password" name="password" class="form-control">
+                        </div>
+                        <input type="submit" value="Login" class="btn btn-success">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Event Modal -->
+    <div class="modal fade" id="event" tabindex="-1" aria-labelledby="eventLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventLabel">Create Event</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/event/create" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="title">Event Title:</label>
+                            <input type="text" name="title" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Event Description:</label>
+                            <input type="text" name="description" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="sport">Choose a Sport:</label>
+                            <select id="sport" name="sport">
+                                <option value="Basketball">Basketball</option>
+                                <option value="Soccer">Soccer</option>
+                                <option value="Tennis">Tennis</option>
+                                <option value="Baseball">Baseball</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="city">Event City:</label>
+                            <input type="text" name="city" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Event Address:</label>
+                            <input type="text" name="address" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="day">Event Date:</label>
+                            <input type="date" name="day" class="form-control">
+                        </div>
+                        <input type="submit" value="Create" class="btn btn-success">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Event Search Modal -->
+    <div class="modal fade" id="findevent" tabindex="-1" aria-labelledby="findeventLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="findeventLabel">Looking for a specific sport?</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="text-align: center;">
+                    <h5>Basketball</h5>
+                    <a class="btn btn-primary" href="/find/basketball">Find</a>
+
+                    <h5>Soccer</h5>
+                    <a class="btn btn-primary" href="/find/soccer">Find</a>
+
+                    <h5>Tennis</h5>
+                    <a class="btn btn-primary" href="/find/tennis">Find</a>
+
+                    <h5>Baseball</h5>
+                    <a class="btn btn-primary" href="/find/baseball">Find</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="{% static '/js/app.js' %}"></script>
+
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+        crossorigin="anonymous"></script>
+
+
+</body>
+
+</html>

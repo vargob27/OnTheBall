@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{user.first_name}} {{user.last_name}}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            <h4>On The Ball</h4>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="/home">Home</a>
+            </li>
+            {% if 'user_id' in request.session %}
+            <li>
+                <button data-bs-toggle="modal" data-bs-target="#event">Create an Event</a>
+            </li>
+            <li>
+                <a href="/user/{{user.id}}">Profile</a>
+            </li>
+            {% endif %}
+            <li>
+                <button data-bs-toggle="modal" data-bs-target="#findevent">Find an Event</a>
+            </li>
+            {% if 'user_id' in request.session %}
+            <li>
+                <a href="/logout">Logout</a>
+            </li>
+            {% endif %}
+        </ul>
+        <div class="burger">
+            <div class="line1">
+            </div>
+            <div class="line2">
+            </div>
+            <div class="line3">
+            </div>
+        </div>
+    </nav>
+    <div id="wrapper" style="background-image: url('http://sfwallpaper.com/images/baseball-wallpaper-25.jpg'); background-attachment: fixed; background-position: center; height: 100%; background-size: cover;">
+        {% if messages %}
+        {% for message in messages %}
+        <p>{{message}}</p>
+        {% endfor %}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-md">
+                <h2 class="text-light">User Info:</h2>
+                <div class="eventInfo text-light">
+                    <p><span class="fw-bold">Name: </span>{{user.first_name}} {{user.last_name}}</p>
+                    <p><span class="fw-bold">Age: </span>{{age}}</p>
+                    <p><span class="fw-bold">Hometown: </span>{{user.location}}</p>
+                    {% if user.id == loggedIn.id %}
+                    <a class="btn btn-warning" href="/user/{{user.id}}/edit">Edit Profile</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md">
+                <h2 class="map_api text-light">Map API</h2>
+                <div id="map""></div>
+                
+            </div>
+        </div>
+        <div>
+            <h3 class="text-light" style="text-align: center; margin-top: 2%;">Events Created By {{user.first_name}}</h3>
+            {% for event in events %}
+            <div class=" text-light events">
+                    <p><span class="text-warning">Event Title: </span>{{event.title}}</p>
+                    <p><span class="text-warning">Event Description: </span>{{event.description}}</p>
+                    <p><span class="text-warning">Sport: </span>{{event.sport}}</p>
+                    <p><span class="text-warning">Location: </span>{{event.city}}</p>
+                    <p><span class="text-warning">Date: </span>{{event.day}}</p>
+                    <p><a href="/event/{{event.id}}" class="btn btn-primary">Visit Event Page</a></p>
+                    {% if event.creator.id == loggedIn.id %}
+                    <a class="btn btn-warning" href="/event/{{event.id}}/edit">Edit Event</a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <script src="{% static '/js/app.js' %}"></script>
+        <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+                <!-- <div id='map' style='width: 400px; height: 400px; display: hidden;'></div> -->
+                <script>
+                    mapboxgl.accessToken = 'pk.eyJ1IjoiaHZhbmdzeSIsImEiOiJja3ZxZG43a2ExeDBnMm9xbm9pbTdtY2R0In0.6FynLOVCn4HluX3rgnWayA';
+                    var map = new mapboxgl.Map({
+                        container: 'map',
+                        style: 'mapbox://styles/mapbox/streets-v11',
+                        center: [-99.7331, 32.4487],
+                        zoom: 12,
+                    });
+                </script>
+        <!-- Event Modal -->
+        <div class="modal fade" id="event" tabindex="-1" aria-labelledby="eventLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="eventLabel">Create Event</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/event/create" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="title">Event Title:</label>
+                                <input type="text" name="title" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Event Description:</label>
+                                <input type="text" name="description" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="sport">Choose a Sport:</label>
+                                <select id="sport" name="sport">
+                                    <option value="Basketball">Basketball</option>
+                                    <option value="Soccer">Soccer</option>
+                                    <option value="Tennis">Tennis</option>
+                                    <option value="Baseball">Baseball</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="city">Event City:</label>
+                                <input type="text" name="city" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Event Address:</label>
+                                <input type="text" name="address" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="day">Event Date:</label>
+                                <input type="date" name="day" class="form-control">
+                            </div>
+                            <input type="submit" value="Create" class="btn btn-success">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Event Search Modal -->
+        <div class="modal fade" id="findevent" tabindex="-1" aria-labelledby="findeventLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="findeventLabel">Looking for a specific sport?</h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" style="text-align: center;">
+                        <h5>Basketball <a class="btn btn-primary" href="/find/basketball">Find</a></h5>
+
+                        <h5>Soccer <a class="btn btn-primary" href="/find/soccer">Find</a></h5>
+
+                        <h5>Tennis <a class="btn btn-primary" href="/find/tennis">Find</a></h5>
+
+                        <h5>Baseball <a class="btn btn-primary" href="/find/baseball">Find</a></h5>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
